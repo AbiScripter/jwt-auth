@@ -12,6 +12,7 @@ const LoginForm = () => {
     password: string;
   };
 
+  //login function
   const login = async ({ username, password }: loginProps) => {
     console.log(username, password);
     try {
@@ -19,7 +20,7 @@ const LoginForm = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          username: `michaelw`,
+          username: `michaelw`, //using this name just becuase we can fetch data with our custom username and password,we can only fetch default users provided by dummyjson
           password: `michaelwpass`,
           expiresInMins: 1,
         }),
@@ -40,6 +41,7 @@ const LoginForm = () => {
     }
   };
 
+  //getting refresh token
   const refreshAccessToken = async () => {
     try {
       const currentRefreshToken = localStorage.getItem("refreshToken");
@@ -66,6 +68,7 @@ const LoginForm = () => {
     }
   };
 
+  //getting protected data
   const getProtectedData = async () => {
     const currentToken = localStorage.getItem("token");
 
@@ -83,6 +86,7 @@ const LoginForm = () => {
     }
   };
 
+  //for every 55 seconds get accessToken by using refresh tokens
   useEffect(() => {
     const tokenRefreshInterval = setInterval(() => {
       console.log("refreshing after 55 seconds");
@@ -92,12 +96,14 @@ const LoginForm = () => {
     return () => clearInterval(tokenRefreshInterval);
   }, []);
 
+  //fetching protected data when token changes
   useEffect(() => {
     if (token) {
       getProtectedData();
     }
   }, [token]);
 
+  //handle form submit
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const username = usernameRef.current?.value || "";
